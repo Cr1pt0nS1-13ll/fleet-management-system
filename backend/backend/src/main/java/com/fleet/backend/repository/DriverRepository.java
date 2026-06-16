@@ -1,4 +1,4 @@
-package com.fleet.bakend.repository;
+package com.fleet.backend.repository;
 
 import com.fleet.backend.entity.Driver;
 import org.springframework.data.jpa.repository.JpaRepository;
