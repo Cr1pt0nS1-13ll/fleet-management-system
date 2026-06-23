@@ -2,6 +2,7 @@ package com.fleet.backend.entity;
 
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Vehicle {
@@ -10,8 +11,13 @@ public class Vehicle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message =  "Nome é obrigatório")
     private String nome;
+
+    @NotBlank(message =  "Placa é obrigatório")
     private String placa;
+
+    @NotBlank(message =  "Modelo é obrigatório")
     private String modelo;
 
     @ManyToOne

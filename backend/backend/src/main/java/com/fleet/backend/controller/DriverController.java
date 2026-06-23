@@ -1,5 +1,6 @@
 package com.fleet.backend.controller;
 
+import jakarta.validation.Valid;
 import com.fleet.backend.entity.Driver;
 import com.fleet.backend.repository.DriverRepository;
 import org.aspectj.apache.bcel.Repository;
@@ -20,7 +21,7 @@ public class DriverController {
     }
 
     @PostMapping
-    public Driver create(@RequestBody Driver driver) {
+    public Driver create(@Valid @RequestBody Driver driver) {
         return repository.save(driver);
     }
 
@@ -56,7 +57,7 @@ public class DriverController {
     @PutMapping("/{id}")
     public ResponseEntity<Driver> atualizar(
             @PathVariable Long id,
-            @RequestBody Driver driver
+            @Valid @RequestBody Driver driver
     ){
 
         Optional<Driver> driverExistente = repository.findById(id);

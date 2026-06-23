@@ -2,6 +2,9 @@ package com.fleet.backend.entity;
 
 import jakarta.persistence.*;
 import java.util.List;
+import jakarta.validation.constraints.NotBlank;
+
+
 
 @Entity
 public class Driver {
@@ -10,7 +13,10 @@ public class Driver {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Nome é obrigatório")
     private String name;
+
+    @NotBlank(message = "Número da CNH é obrigatório")
     private String licenseNumber;
 
     @OneToMany(mappedBy = "driver")

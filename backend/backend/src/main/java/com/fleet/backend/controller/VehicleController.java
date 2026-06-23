@@ -1,13 +1,14 @@
 package com.fleet.backend.controller;
 
-import com.fleet.backend.entity.Vehicle;
+import com.fleet.backend.dto.VehicleRequestDTO;
+import com.fleet.backend.dto.VehicleResponseDTO;
 import com.fleet.backend.service.VehicleService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/vehicles")
@@ -16,42 +17,42 @@ public class VehicleController {
     @Autowired
     private VehicleService vehicleService;
 
+    // CREATE
+    @PostMapping
+    public ResponseEntity<VehicleResponseDTO> criarVehicle(
+            @Valid @RequestBody VehicleRequestDTO dto
+    ) {
+        return ResponseEntity.ok(vehicleService.criarVehicle(dto));
+    }
+
+    // LIST
     @GetMapping
-    public List<Vehicle> listarVehicles() {
+    public List<VehicleResponseDTO> listarVehicles() {
         return vehicleService.listarVehicles();
     }
 
-    @PostMapping
-    public Vehicle criarVehicle(@RequestBody Vehicle vehicle) {
-        return vehicleService.criarVehicle(vehicle);
-    }
-
+    // GET BY ID
     @GetMapping("/{id}")
-    public ResponseEntity<Vehicle> buscarVehicle(@PathVariable Long id) {
+    public ResponseEntity<VehicleResponseDTO> buscarVehicle(@PathVariable Long id) {
 
-        Optional<Vehicle> vehicle = vehicleService.buscarVehicle(id);
-
-        return vehicle.map(ResponseEntity::ok)
+        return vehicleService.buscarVehicle(id)
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
-    public void deletarVehicle(@PathVariable Long id) {
-        vehicleService.deletarVehicle(id);
+    // UPDATE
+    @PutMapping("/{id}")
+    public ResponseEntity<VehicleResponseDTO> atualizarVehicle(
+            @PathVariable Long id,
+            @Valid @RequestBody VehicleRequestDTO dto
+    ) {
+        return ResponseEntity.ok(vehicleService.atualizarVehicle(id, dto));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Vehicle> atualizarVehicle(
-            @PathVariable Long id,
-            @RequestBody Vehicle vehicle
-    ) {
-
-        Vehicle atualizado = vehicleService.atualizarVehicle(id, vehicle);
-
-        if (atualizado != null) {
-            return ResponseEntity.ok(atualizado);
-        }
-
-        return ResponseEntity.notFound().build();
+    // DELETE
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarVehicle(@PathVariable Long id) {
+        vehicleService.deletarVehicle(id);
+        return ResponseEntity.noContent().build();
     }
 }
