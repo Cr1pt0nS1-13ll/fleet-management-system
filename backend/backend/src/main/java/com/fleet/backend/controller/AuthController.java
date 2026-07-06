@@ -1,5 +1,7 @@
 package com.fleet.backend.controller;
 
+
+import com.fleet.backend.service.JwtService;
 import com.fleet.backend.dto.LoginRequestDTO;
 import com.fleet.backend.dto.LoginResponseDTO;
 import com.fleet.backend.entity.User;
@@ -16,6 +18,9 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    private JwtService jwtService;
+
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(
             @Valid @RequestBody LoginRequestDTO dto
@@ -26,10 +31,10 @@ public class AuthController {
         // Ainda não estamos gerando JWT.
         // Apenas confirmando que o login foi realizado.
 
+        String token = jwtService.generateToken(user.getUsername());
+
         return ResponseEntity.ok(
-                new LoginResponseDTO(
-                        "LOGIN REALIZADO COM SUCESSO"
-                )
+                new LoginResponseDTO(token)
         );
     }
 
