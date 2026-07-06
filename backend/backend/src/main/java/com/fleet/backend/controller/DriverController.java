@@ -1,93 +1,55 @@
 package com.fleet.backend.controller;
 
+import com.fleet.backend.dto.DriverRequestDTO;
+import com.fleet.backend.dto.DriverResponseDTO;
+import com.fleet.backend.service.DriverService;
 import jakarta.validation.Valid;
-import com.fleet.backend.entity.Driver;
-import com.fleet.backend.repository.DriverRepository;
-import org.aspectj.apache.bcel.Repository;
-import org.springframework.web.bind.annotation.*;
-import com.fleet.backend.entity.Vehicle;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import java.util.Optional;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/drivers")
 public class DriverController {
 
-    private final DriverRepository repository;
+    @Autowired
+    private DriverService driverService;
 
-    public DriverController(DriverRepository repository) {
-        this.repository = repository;
-    }
-
+    // CREATE
     @PostMapping
-    public Driver create(@Valid @RequestBody Driver driver) {
-        return repository.save(driver);
+    public ResponseEntity<DriverResponseDTO> create(
+            @Valid @RequestBody DriverRequestDTO dto
+    ) {
+        return ResponseEntity.ok(driverService.create(dto));
     }
 
+    // LIST
     @GetMapping
-    public List<Driver> list() {
-        return repository.findAll();
+    public List<DriverResponseDTO> list() {
+        return driverService.list();
     }
 
-    @GetMapping("/{id}/vehicles")
-    public ResponseEntity<List<Vehicle>> listarVeiculosDoMotorista(@PathVariable Long id) {
-
-        Optional<Driver> driver = repository.findById(id);
-
-        if (driver.isPresent()) {
-            return ResponseEntity.ok(driver.get().getVehicles());
-        }
-
-        return ResponseEntity.notFound().build();
-    }
-
+    // GET BY ID
     @GetMapping("/{id}")
-    public ResponseEntity<Driver> buscarPorId(@PathVariable Long id) {
-
-        Optional<Driver> driver = repository.findById(id);
-
-        if (driver.isPresent()) {
-            return ResponseEntity.ok(driver.get());
-
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<DriverResponseDTO> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(driverService.findById(id));
     }
 
+    // UPDATE
     @PutMapping("/{id}")
-    public ResponseEntity<Driver> atualizar(
+    public ResponseEntity<DriverResponseDTO> update(
             @PathVariable Long id,
-            @Valid @RequestBody Driver driver
-    ){
-
-        Optional<Driver> driverExistente = repository.findById(id);
-
-        if (driverExistente.isPresent()) {
-
-            Driver driverAtualizado = driverExistente.get();
-
-            driverAtualizado.setName(driver.getName());
-            driverAtualizado.setLicenseNumber(driver.getLicenseNumber());
-
-            return ResponseEntity.ok(
-                    repository.save(driverAtualizado)
-            );
-
-        }
-        return ResponseEntity.notFound().build();
+            @Valid @RequestBody DriverRequestDTO dto
+    ) {
+        return ResponseEntity.ok(driverService.update(id, dto));
     }
 
+    // DELETE
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
-
-        if (repository.existsById(id)) {
-
-            repository.deleteById(id);
-
-            return ResponseEntity.noContent().build();
-        }
-
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        driverService.delete(id);
+        return ResponseEntity.noContent().build();
     }
-
 }

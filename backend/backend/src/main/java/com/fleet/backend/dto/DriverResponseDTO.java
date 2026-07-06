@@ -1,6 +1,7 @@
 package com.fleet.backend.dto;
 
 import java.util.List;
+import com.fleet.backend.dto.VehicleResponseDTO;
 
 public class DriverResponseDTO {
 
@@ -9,15 +10,35 @@ public class DriverResponseDTO {
     private String licenseNumber;
     private List<VehicleResponseDTO> vehicles;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getLicenseNumber() { return licenseNumber; }
-    public void setLicenseNumber(String licenseNumber) { this.licenseNumber = licenseNumber; }
+    public String getName() {
+        return name;
+    }
 
-    public List<VehicleResponseDTO> getVehicles() { return vehicles; }
-    public void setVehicles(List<VehicleResponseDTO> vehicles) { this.vehicles = vehicles; }
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getLicenseNumber() {
+        return licenseNumber;
+    }
+
+    public void setLicenseNumber(String licenseNumber) {
+        this.licenseNumber = licenseNumber;
+    }
+
+    public List<VehicleResponseDTO> getVehicles() {
+        return vehicles;
+    }
+
+    public void setVehicles(List<VehicleResponseDTO> vehicles) {
+        this.vehicles = vehicles;
+    }
 }
