@@ -3,17 +3,17 @@ package com.fleet.backend.service;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Service;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 
 import java.util.Date;
 
 @Service
 public class JwtService {
 
-    // Chave secreta (mais tarde vamos movê-la para application.properties)
     private static final String SECRET_KEY =
             "MinhaChaveSecretaMuitoGrandeParaGerarJwtFleet2026";
 
-    // 24 horas
     private static final long EXPIRATION_TIME =
             1000 * 60 * 60 * 24;
 
@@ -30,6 +30,33 @@ public class JwtService {
                         SECRET_KEY
                 )
                 .compact();
+    }
+
+    public String extractUsername(String token) {
+
+        Claims claims = Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.getSubject();
+    }
+
+    public boolean validateToken(String token) {
+
+        try {
+
+            Jwts.parser()
+                    .setSigningKey(SECRET_KEY)
+                    .parseClaimsJws(token);
+
+            return true;
+
+        } catch (JwtException | IllegalArgumentException e) {
+
+            return false;
+
+        }
 
     }
 
